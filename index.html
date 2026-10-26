@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>아미라운지 4-R · 데모 QR</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="menu.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header><div class="brand">아미라운지 <span>4-R</span></div><p>음료 선택 데모 QR</p></header>
+  <main>
+    <div class="notice">현장 기기에서 무료 음료가 제조되는 데모 QR입니다.</div>
+    <nav aria-label="이전 화면"><button id="back" hidden>뒤로가기</button><span id="step">카테고리 선택</span></nav>
+    <h1 id="title" tabindex="-1">어떤 음료를 고를까요?</h1>
+    <p id="description">따뜻하게 또는 시원하게, 카테고리를 선택해 주세요.</p>
+    <section id="content" aria-labelledby="title"></section>
+    <p class="source">메뉴: 2026.10.26 기기 조회 기준 29종 · 메뉴·레시피 연결 확인</p>
+  </main>
+  <footer>아미라운지 4-R 전용 · 현장 스캔·제조 시험 미실시</footer>
+</body>
+</html>
