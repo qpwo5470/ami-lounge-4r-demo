@@ -137,7 +137,8 @@ test('demo mode keeps its existing paths and qr assets', async () => {
   await page.locator('#content .drink').first().click();
   const img = page.locator('.qr-panel img');
   assert.equal(await img.getAttribute('src'), 'qr/drink-01.svg');
-  assert.equal(await img.evaluate(node => node.naturalWidth > 0), true);
+  // 디코딩 완료까지 기다린 뒤 검사한다(로드 경쟁으로 깜빡이지 않도록).
+  assert.equal(await img.evaluate(node => node.decode().then(() => node.naturalWidth > 0)), true);
   await page.click('#back');
   await page.click('#back');
   assert.equal(await page.locator('#content .category').count(), 2);
@@ -257,6 +258,65 @@ for (const [label, responder, kind] of [
     await page.context().close();
   });
 }
+
+/* 지연 응답 회귀: 전송 중 기기/모드를 바꾸면 그 응답은 현재 화면의 것이 아니므로 표시하지 않는다.
+   요청은 중단하지 않고(수락되었을 수 있으므로) 자동 재전송도 하지 않는다. */
+for (const [label, interrupt] of [
+  ['side change', async page => page.selectOption('#device', 'L')],
+  ['mode change and back', async page => { await page.click('#mode-demo'); await page.click('#mode-receipt'); }],
+]) {
+  test(`delayed success is not shown after a ${label} while in flight`, async () => {
+    const page = await newPage();
+    const seen = await mockEndpoint(page, json(200, { code: 'ACCEPTED' }, 650));
+    await prepareReceipt(page, { side: 'R', drink: '아메리카노(산미)' });
+    await page.click('#receipt-send');
+    await interrupt(page);
+    assert.equal(await page.locator('#receipt-send').isDisabled(), true); // 맥락이 바뀌어도 이중 전송 금지
+    await page.waitForTimeout(900);
+    assert.equal(seen.length, 1, label);                                  // 중단도 자동 재전송도 없음
+    assert.equal(await page.locator('#receipt-result').isVisible(), false);
+    assert.equal(await page.locator('#receipt-result svg').count(), 0);
+    assert.equal(await page.locator('#receipt-error').isVisible(), false);
+    assert.equal(await page.locator('#receipt-retry').isVisible(), false);
+    assert.match(await page.locator('#receipt-status').textContent(), /표시하지 않습니다/);
+    assert.deepEqual(page.errors, []);
+    // 무효화 이후 새 선택으로 다시 보내면 새 본문으로 정상 동작한다.
+    await page.locator('#receipt-drinks button').first().click();
+    await page.click('#receipt-send');
+    await page.waitForSelector('#receipt-result:not([hidden])');
+    assert.equal(seen.length, 2);
+    assert.notEqual(seen[1].postData, seen[0].postData);
+    await page.context().close();
+  });
+}
+
+test('delayed error after a side change shows neither QR nor the error box', async () => {
+  const page = await newPage();
+  const seen = await mockEndpoint(page, json(503, { code: 'UNAVAILABLE' }, 650));
+  await prepareReceipt(page, { side: 'R' });
+  await page.click('#receipt-send');
+  await page.selectOption('#device', 'L');
+  await page.waitForTimeout(900);
+  assert.equal(seen.length, 1);
+  assert.equal(await page.locator('#receipt-error').isVisible(), false);
+  assert.equal(await page.locator('#receipt-result').isVisible(), false);
+  assert.equal(await page.locator('#receipt-retry').isVisible(), false); // 다른 맥락의 요청은 재시도 대상이 아니다
+  await page.context().close();
+});
+
+test('retry still reuses the same immutable request when the context did not change', async () => {
+  const page = await newPage();
+  const seen = await mockEndpoint(page, json(503, { code: 'UNAVAILABLE' }, 120));
+  await prepareReceipt(page);
+  await page.click('#receipt-send');
+  await page.waitForSelector('#receipt-error:not([hidden])');
+  await page.unroute(ENDPOINT_GLOB);
+  const accepted = await mockEndpoint(page, json(200, { code: 'ACCEPTED' }));
+  await page.click('#receipt-retry');
+  await page.waitForSelector('#receipt-result:not([hidden])');
+  assert.equal(accepted[0].postData, seen[0].postData);
+  await page.context().close();
+});
 
 test('conflict is shown and identity is never auto-changed on retry', async () => {
   const page = await newPage();

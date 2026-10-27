@@ -1,14 +1,29 @@
 {
   "issue": "https://github.com/qpwo5470/ami-lounge-4r-demo/issues/1",
   "contractIssue": "https://github.com/qpwo5470/408d_web/issues/103",
-  "checkedAt": "2026-10-27T12:05:00Z",
+  "checkedAt": "2026-10-27T13:20:00Z",
   "tests": {
     "command": "node --test \"tests/*.test.mjs\"",
-    "total": 31,
-    "passed": 31,
+    "total": 35,
+    "passed": 35,
     "failed": 0,
     "nodeContract": 14,
-    "browser": 17
+    "browser": 21,
+    "repeatedRuns": 2
+  },
+  "staleResponseFix": {
+    "reportedBy": "root browser QA (browser-qa.cjs, staleAfterSideSwitch)",
+    "cause": "send() rendered the response after await even when side/mode changed mid-flight",
+    "fix": "generation guard: context changes invalidate presentation of any in-flight response",
+    "inFlightRequest": "never aborted and never auto-reissued",
+    "retry": "same immutable body, only while the original context is still active",
+    "doubleSubmit": "send stays disabled across side/mode changes until the pending request settles",
+    "regressionTests": [
+      "delayed success is not shown after a side change while in flight",
+      "delayed success is not shown after a mode change and back while in flight",
+      "delayed error after a side change shows neither QR nor the error box",
+      "retry still reuses the same immutable request when the context did not change"
+    ]
   },
   "browser": {
     "engine": "system Google Chrome 156.0.8078.48 via playwright-core (local .devtools, not committed)",

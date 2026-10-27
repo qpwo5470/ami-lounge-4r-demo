@@ -6,6 +6,7 @@
   const catalog = window.RECEIPT_CATALOG;
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const DEFAULT_POS = { L: '01', R: '02' };
+  const STALE_NOTE = '설정이 바뀌어 진행 중이던 이전 요청의 결과는 표시하지 않습니다. 그 요청은 서버에 기록되었을 수 있습니다.';
   const el = id => document.querySelector(`#${id}`);
   const keyInput = el('auth-key');
   const applyKey = el('auth-apply');
@@ -31,6 +32,7 @@
   let attempt = null;          // 직전에 만든 불변 요청
   let inFlight = false;
   let billNoDirty = false;     // 사용자가 직접 입력한 번호는 자동 변경하지 않는다
+  let generation = 0;          // 화면 맥락 세대. 응답은 자기 세대에서만 표시한다.
 
   storeOutput.textContent = catalog.storeCd;
   sourceInput.value = catalog.sourceId;
@@ -58,6 +60,14 @@
     }
   }
 
+  /* 기기·모드·메뉴·식별자가 바뀌면 그 전에 보낸 요청의 응답은 지금 화면의 것이 아니다.
+     요청 자체는 중단하지 않고(수락되었을 수 있으므로) 표시만 무효로 한다. */
+  function invalidateContext() {
+    generation += 1;
+    clearResult();
+    if (inFlight) statusText.textContent = STALE_NOTE;
+  }
+
   function updateSendState() {
     const ready = Boolean(authKey) && Boolean(selected) && !inFlight;
     sendButton.disabled = !ready;
@@ -80,7 +90,7 @@
         if (category === name) return;
         category = name;
         selected = null;
-        clearResult();
+        invalidateContext();
         renderCategories();
         renderDrinks();
         renderSelected();
@@ -100,7 +110,7 @@
       node.textContent = `${item.name} · ${item.price.toLocaleString('ko-KR')}원`;
       node.addEventListener('click', () => {
         selected = item;
-        clearResult();
+        invalidateContext();
         refreshBillNoDefault();
         renderDrinks();
         renderSelected();
@@ -210,6 +220,7 @@
   async function send(request, isRetry) {
     if (inFlight) return;
     inFlight = true;
+    const requestGeneration = generation;
     updateSendState();
     statusText.textContent = isRetry ? '같은 요청 재전송 중…' : '전송 중…';
     let verdict;
@@ -234,6 +245,12 @@
       verdict = core.classifyResponse({ networkError: true });
     }
     inFlight = false;
+    // 응답이 도착하기 전에 맥락이 바뀌었으면 QR도 오류도 표시하지 않는다.
+    if (requestGeneration !== generation) {
+      statusText.textContent = STALE_NOTE;
+      updateSendState();
+      return;
+    }
     statusText.textContent = verdict.ok ? '서버 수락됨' : '전송 실패';
     if (verdict.ok) {
       errorBox.hidden = true;
@@ -250,7 +267,7 @@
 
   sendButton.addEventListener('click', () => {
     if (inFlight || !selected || !authKey) return;
-    clearResult();
+    invalidateContext();
     refreshBillNoDefault();
     let request;
     try {
@@ -286,7 +303,7 @@
     authKey = value;
     keyInput.value = '';
     keyState.textContent = '키 적용됨 (메모리 전용)';
-    clearResult();
+    invalidateContext();
     updateSendState();
   });
 
@@ -294,7 +311,7 @@
     authKey = '';
     keyInput.value = '';
     keyState.textContent = '키 없음';
-    clearResult();
+    invalidateContext();
     updateSendState();
   });
 
@@ -305,15 +322,15 @@
   billInput.addEventListener('input', () => {
     billInput.value = billInput.value.replace(/\D/g, '').slice(0, 4);
     billNoDirty = true;
-    clearResult();
+    invalidateContext();
   });
-  posSelect.addEventListener('change', () => { billNoDirty = false; clearResult(); refreshBillNoDefault(); });
-  sourceInput.addEventListener('input', () => clearResult());
+  posSelect.addEventListener('change', () => { billNoDirty = false; invalidateContext(); refreshBillNoDefault(); });
+  sourceInput.addEventListener('input', () => invalidateContext());
 
   document.addEventListener('side-change', event => {
     side = event.detail;
     selected = null;
-    clearResult();
+    invalidateContext();
     posSelect.value = DEFAULT_POS[side] || '01';
     billNoDirty = false;
     refreshBillNoDefault();
@@ -324,7 +341,7 @@
   });
 
   document.addEventListener('mode-change', () => {
-    clearResult();
+    invalidateContext();
     refreshBillNoDefault();
     updateSendState();
   });
