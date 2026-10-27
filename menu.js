@@ -7,12 +7,12 @@ window.DEMO_MENU = [
   {
     "id": "drink-02",
     "category": "HOT",
-    "name": "카페라떼(고소)"
+    "name": "카페라떼"
   },
   {
     "id": "drink-03",
     "category": "HOT",
-    "name": "말차카페라떼(고소)"
+    "name": "말차카페라떼"
   },
   {
     "id": "drink-04",
@@ -32,22 +32,22 @@ window.DEMO_MENU = [
   {
     "id": "drink-07",
     "category": "HOT",
-    "name": "카라멜 아메리카노(고소)"
+    "name": "카라멜 아메리카노"
   },
   {
     "id": "drink-08",
     "category": "HOT",
-    "name": "바닐라 아메리카노(고소)"
+    "name": "바닐라 아메리카노"
   },
   {
     "id": "drink-09",
     "category": "HOT",
-    "name": "카라멜 마끼아또(고소)"
+    "name": "카라멜 마끼아또"
   },
   {
     "id": "drink-10",
     "category": "HOT",
-    "name": "바닐라 카페라떼(고소)"
+    "name": "바닐라 카페라떼"
   },
   {
     "id": "drink-11",
@@ -72,7 +72,7 @@ window.DEMO_MENU = [
   {
     "id": "drink-15",
     "category": "ICE",
-    "name": "카페라떼(고소)"
+    "name": "카페라떼"
   },
   {
     "id": "drink-16",
@@ -92,27 +92,27 @@ window.DEMO_MENU = [
   {
     "id": "drink-19",
     "category": "ICE",
-    "name": "카라멜 아메리카노(고소)"
+    "name": "카라멜 아메리카노"
   },
   {
     "id": "drink-20",
     "category": "ICE",
-    "name": "바닐라 아메리카노(고소)"
+    "name": "바닐라 아메리카노"
   },
   {
     "id": "drink-21",
     "category": "ICE",
-    "name": "아샷추(고소)"
+    "name": "아샷추"
   },
   {
     "id": "drink-22",
     "category": "ICE",
-    "name": "카라멜 마끼아또(고소)"
+    "name": "카라멜 마끼아또"
   },
   {
     "id": "drink-23",
     "category": "ICE",
-    "name": "바닐라 카페라떼(고소)"
+    "name": "바닐라 카페라떼"
   },
   {
     "id": "drink-24",
