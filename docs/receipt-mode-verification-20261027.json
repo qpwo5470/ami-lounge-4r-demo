@@ -1,0 +1,46 @@
+{
+  "issue": "https://github.com/qpwo5470/ami-lounge-4r-demo/issues/1",
+  "contractIssue": "https://github.com/qpwo5470/408d_web/issues/103",
+  "checkedAt": "2026-10-27T12:05:00Z",
+  "tests": {
+    "command": "node --test \"tests/*.test.mjs\"",
+    "total": 31,
+    "passed": 31,
+    "failed": 0,
+    "nodeContract": 14,
+    "browser": 17
+  },
+  "browser": {
+    "engine": "system Google Chrome 156.0.8078.48 via playwright-core (local .devtools, not committed)",
+    "fetch": "fully mocked with page.route",
+    "networkGuard": "--host-resolver-rules=MAP * 0.0.0.0, EXCLUDE 127.0.0.1",
+    "productionCalls": 0,
+    "horizontalOverflow": { "mobile390": false, "desktop1200": false },
+    "pageErrors": []
+  },
+  "qr": {
+    "library": "qrcode-generator 2.0.4 (MIT, vendored)",
+    "sha256": "79ec86f82856005b1c887905cfccfcfbec3821ca61c7fd5a952faa5f778f791c",
+    "renderedAs": "inline SVG built with DOM APIs",
+    "independentDecode": "jsQR decoded the rendered SVG to the exact QR_PAYLOAD",
+    "physicalScanManufacture": "not_executed"
+  },
+  "preserved": {
+    "demoQrAssets": 29,
+    "qrDirDiffVsHead": "none",
+    "menuJsDiffVsHead": "none"
+  },
+  "catalog": {
+    "source": "receipt-catalog.json",
+    "generated": "receipt-catalog.js (node tools/build-catalog.mjs)",
+    "perSide": 29,
+    "hot": 13,
+    "ice": 16
+  },
+  "secrets": {
+    "authKeyStorage": "in-memory only",
+    "localStorageKeys": ["receipt-mode:billno:<businessDate>:<posNo>"],
+    "committedSecrets": "none"
+  },
+  "notDone": ["push", "deploy", "device operations", "production receiver smoke"]
+}

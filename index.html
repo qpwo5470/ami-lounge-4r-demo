@@ -3,28 +3,88 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src https://asia-northeast3-cuppy-408d.cloudfunctions.net; base-uri 'none'; form-action 'none'">
   <title>아미라운지 포병여단 L/R · 데모 QR</title>
-  <link rel="stylesheet" href="style.css?v=20261027-1">
-  <script src="menu.js?v=20261027-1" defer></script>
-  <script src="app.js?v=20261027-1" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261027-2">
+  <script src="menu.js?v=20261027-2" defer></script>
+  <script src="receipt-catalog.js?v=20261027-2" defer></script>
+  <script src="vendor/qrcode-generator/qrcode.js?v=2.0.4" defer></script>
+  <script src="receipt-core.js?v=20261027-2" defer></script>
+  <script src="app.js?v=20261027-2" defer></script>
+  <script src="receipt.js?v=20261027-2" defer></script>
 </head>
 <body>
   <header><div class="brand">아미라운지 <span>포병여단 L/R</span></div><p>음료 선택 데모 QR</p></header>
   <main>
-    <div class="notice">현장 기기에서 무료 음료가 제조되는 데모 QR입니다.</div>
+    <div class="mode-tabs" role="group" aria-label="모드 선택">
+      <button id="mode-demo" class="mode-tab" aria-pressed="true">무료 반복 데모 QR</button>
+      <button id="mode-receipt" class="mode-tab" aria-pressed="false">실제 영수증 QR</button>
+    </div>
     <label class="device-picker" for="device">사용할 기기
       <select id="device">
         <option value="L">포병여단 L · 고소</option>
         <option value="R">포병여단 R · 산미</option>
       </select>
     </label>
-    <nav aria-label="이전 화면"><button id="back" hidden>뒤로가기</button><span id="step">카테고리 선택</span></nav>
-    <h1 id="title" tabindex="-1">어떤 음료를 고를까요?</h1>
-    <p id="description">따뜻하게 또는 시원하게, 카테고리를 선택해 주세요.</p>
-    <section id="content" aria-labelledby="title"></section>
-    <p class="source">2026.10.27 기준 · 기기별 HOT 13종 / ICE 16종 · 아메리카노 L(고소) / R(산미)</p>
+    <section id="demo-mode" aria-label="무료 반복 데모 QR">
+      <div class="notice">현장 기기에서 무료 음료가 제조되는 데모 QR입니다.</div>
+      <nav aria-label="이전 화면"><button id="back" hidden>뒤로가기</button><span id="step">카테고리 선택</span></nav>
+      <h1 id="title" tabindex="-1">어떤 음료를 고를까요?</h1>
+      <p id="description">따뜻하게 또는 시원하게, 카테고리를 선택해 주세요.</p>
+      <section id="content" aria-labelledby="title"></section>
+      <p class="source">2026.10.27 기준 · 기기별 HOT 13종 / ICE 16종 · 아메리카노 L(고소) / R(산미)</p>
+    </section>
+    <section id="receipt-mode" aria-label="실제 영수증 QR" hidden>
+      <div class="notice notice-real">
+        <strong>실제 운영 판매 기록이 생성됩니다.</strong>
+        키오스크와 동일한 정상 인증 판매 전송을 보내 운영 판매/교환권 기록을 남깁니다. 카드 실제 과금은 발생하지 않습니다.
+        발급되는 QR은 <strong>1회용</strong>이며, 시간·횟수 제한 없이 쓰는 무료 반복 데모 QR과 다릅니다.
+      </div>
+      <h2 id="receipt-title" tabindex="-1">영수증 QR 발급</h2>
+      <p id="receipt-description">인증 키와 영수증 정보를 확인한 뒤 음료를 고르고 전송하세요. 서버가 수락한 다음에만 QR이 만들어집니다.</p>
+      <div class="field-grid">
+        <label class="field" for="auth-key">인증 키
+          <input id="auth-key" type="password" autocomplete="new-password" spellcheck="false" placeholder="현장에서 전달받은 키">
+          <span class="hint">메모리에만 보관하며 저장·표시·기록하지 않습니다. 새로고침하면 다시 입력합니다.</span>
+        </label>
+        <div class="field field-inline">
+          <button id="auth-apply" type="button">키 적용</button>
+          <button id="auth-clear" type="button">키 지우기</button>
+          <span id="auth-state" class="hint" role="status">키 없음</span>
+        </div>
+        <label class="field" for="source-id">소스 ID (X-Kiosk-Source)
+          <input id="source-id" type="text" autocomplete="off" spellcheck="false" value="kis-N61605">
+        </label>
+        <label class="field" for="pos-no">POS 번호
+          <select id="pos-no">
+            <option value="01">01</option>
+            <option value="02">02</option>
+          </select>
+        </label>
+        <label class="field" for="bill-no">영수증 번호 (4자리)
+          <input id="bill-no" type="text" inputmode="numeric" autocomplete="off" maxlength="4">
+          <span class="hint">실제 키오스크 번호와 겹치지 않도록 9000~9999 고범위를 영업일·POS별로 자동 제안합니다.</span>
+        </label>
+        <div class="field">
+          <span class="field-label">매장 코드</span>
+          <output id="store-cd">N61605</output>
+        </div>
+      </div>
+      <div class="receipt-menu">
+        <div class="category-tabs" role="group" aria-label="카테고리"></div>
+        <div id="receipt-drinks" class="drinks"></div>
+      </div>
+      <div id="receipt-selected" class="selected-box" hidden></div>
+      <div class="actions">
+        <button id="receipt-send" type="button" class="primary" disabled>실제 판매 전송</button>
+        <button id="receipt-retry" type="button" hidden>같은 요청 재시도</button>
+        <span id="receipt-status" class="hint" role="status"></span>
+      </div>
+      <div id="receipt-error" class="error-box" role="alert" hidden></div>
+      <div id="receipt-result" class="qr-panel receipt-result" hidden></div>
+      <p class="source">메뉴 값은 receipt-catalog.json(2026.10.27 검증) 기준 선택한 기기의 menuItemId/상품코드/가격을 그대로 사용합니다.</p>
+    </section>
   </main>
-  <footer>포병여단 L/R 무료 반복 데모 · 주문 영수증 QR과 별개 · 실제 스캔·제조 확인은 현장에서 진행해 주세요.</footer>
+  <footer>포병여단 L/R · 무료 반복 데모 QR과 실제 영수증 QR은 별개 · 실제 스캔·제조 확인은 현장에서 진행해 주세요.</footer>
 </body>
 </html>

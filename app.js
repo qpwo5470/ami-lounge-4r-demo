@@ -56,7 +56,30 @@
     }
     if (focus) title.focus();
   }
-  devicePicker.addEventListener('change', () => { device = devicePicker.value; render(); });
+  devicePicker.addEventListener('change', () => {
+    device = devicePicker.value;
+    render(mode === 'demo');
+    emit('side-change', device);
+  });
   back.addEventListener('click', () => { if (selected) selected = null; else category = null; render(); });
+
+  // 모드 전환: 데모 화면은 그대로 두고 표시만 바꾼다.
+  const modeSections = { demo: document.querySelector('#demo-mode'), receipt: document.querySelector('#receipt-mode') };
+  const modeTabs = { demo: document.querySelector('#mode-demo'), receipt: document.querySelector('#mode-receipt') };
+  let mode = 'demo';
+  const emit = (name, detail) => document.dispatchEvent(new CustomEvent(name, { detail }));
+  function setMode(next, focus = true) {
+    mode = next;
+    for (const key of Object.keys(modeSections)) {
+      modeSections[key].hidden = key !== mode;
+      modeTabs[key].setAttribute('aria-pressed', String(key === mode));
+      modeTabs[key].classList.toggle('active', key === mode);
+    }
+    emit('mode-change', mode);
+    if (focus) (mode === 'demo' ? title : document.querySelector('#receipt-title')).focus();
+  }
+  for (const key of Object.keys(modeTabs)) modeTabs[key].addEventListener('click', () => setMode(key));
+  window.DEMO_SHELL = { get mode() { return mode; }, get device() { return device; }, setMode };
+  setMode('demo', false);
   render(false);
 })();
