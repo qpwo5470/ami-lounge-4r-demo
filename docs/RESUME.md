@@ -21,3 +21,9 @@
 - Node syntax / git diff --check passed. Installed Chrome via Playwright: 58 side/category/drink/QR/back paths passed, HOT13+ICE16 each. QR image loading passed, mobile360x800 device switch and800x360 layout have no horizontal overflow; no browser page errors.
 - Existing SVG29 payloads were separately decoded by native Vision before this change. No scanner input or manufacture sent.
 - Await assigned app/device restoration evidence before pushing main (GitHub Pages auto-publishes).
+
+## Release readiness verified
+- Both exact target devices independently read back at1.0.44(9)-DEMO-ARMY, SHA256b81b606d23380eff57cbecf05d613ac9d57db3950d272cfea7753fbd40993443. Each existing29 QR tokens matches current local menu PK and name/47recipe-field fingerprint. L additional8 codes preserved byte-for-value. Both foreground OrderActivity.
+- App owner reported all2490 executed unit tests passed (20 skipped), latest-field methods/classes and signer preserved, DB/schema/data and device connectivity verified. ADB install response loss was checked by installed version/hash instead of blindly repeated.
+- Local page QA and independent device readback summary: verification-20261027.json. Private device backups/APK binaries are not in this repository.
+- This release retains the original29 SVG files/token values and existing Pages URL. GitHub Pages publishes main/root. Live deployment evidence will be recorded in issue291 after push. Actual field scanner/physical manufacture remains unexecuted by automation.

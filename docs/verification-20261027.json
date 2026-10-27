@@ -1,0 +1,35 @@
+{
+  "issue": "https://github.com/qpwo5470/408d/issues/291",
+  "checkedAt": "2026-10-27T05:15:32.236Z",
+  "page": {
+    "passed": true,
+    "sideCategoryDrinkQrPaths": 58,
+    "qrAssetsPreserved": 29,
+    "hotPerDevice": 13,
+    "icePerDevice": 16,
+    "mobileDeviceSwitch": true,
+    "portraitLandscapeNoHorizontalOverflow": true,
+    "browserErrors": [],
+    "actualPhysicalScan": "not_executed"
+  },
+  "devices": [
+    {
+      "side": "L",
+      "versionName": "1.0.44 (9)-DEMO-ARMY",
+      "installedApkSha256": "b81b606d23380eff57cbecf05d613ac9d57db3950d272cfea7753fbd40993443",
+      "matchedCodes": 29,
+      "preservedExtraCodes": 8,
+      "scannerOrderScreen": true,
+      "physicalScanManufacture": "not_executed"
+    },
+    {
+      "side": "R",
+      "versionName": "1.0.44 (9)-DEMO-ARMY",
+      "installedApkSha256": "b81b606d23380eff57cbecf05d613ac9d57db3950d272cfea7753fbd40993443",
+      "matchedCodes": 29,
+      "preservedExtraCodes": 0,
+      "scannerOrderScreen": true,
+      "physicalScanManufacture": "not_executed"
+    }
+  ]
+}
