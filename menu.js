@@ -2,7 +2,11 @@ window.DEMO_MENU = [
   {
     "id": "drink-01",
     "category": "HOT",
-    "name": "아메리카노(고소)"
+    "name": "아메리카노",
+    "names": {
+      "L": "아메리카노(고소)",
+      "R": "아메리카노(산미)"
+    }
   },
   {
     "id": "drink-02",
@@ -67,7 +71,11 @@ window.DEMO_MENU = [
   {
     "id": "drink-14",
     "category": "ICE",
-    "name": "아메리카노(고소)"
+    "name": "아메리카노",
+    "names": {
+      "L": "아메리카노(고소)",
+      "R": "아메리카노(산미)"
+    }
   },
   {
     "id": "drink-15",

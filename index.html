@@ -4,21 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>아미라운지 4-R · 데모 QR</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="menu.js" defer></script>
-  <script src="app.js" defer></script>
+  <title>아미라운지 포병여단 L/R · 데모 QR</title>
+  <link rel="stylesheet" href="style.css?v=20261027-1">
+  <script src="menu.js?v=20261027-1" defer></script>
+  <script src="app.js?v=20261027-1" defer></script>
 </head>
 <body>
-  <header><div class="brand">아미라운지 <span>4-R</span></div><p>음료 선택 데모 QR</p></header>
+  <header><div class="brand">아미라운지 <span>포병여단 L/R</span></div><p>음료 선택 데모 QR</p></header>
   <main>
     <div class="notice">현장 기기에서 무료 음료가 제조되는 데모 QR입니다.</div>
+    <label class="device-picker" for="device">사용할 기기
+      <select id="device">
+        <option value="L">포병여단 L · 고소</option>
+        <option value="R">포병여단 R · 산미</option>
+      </select>
+    </label>
     <nav aria-label="이전 화면"><button id="back" hidden>뒤로가기</button><span id="step">카테고리 선택</span></nav>
     <h1 id="title" tabindex="-1">어떤 음료를 고를까요?</h1>
     <p id="description">따뜻하게 또는 시원하게, 카테고리를 선택해 주세요.</p>
     <section id="content" aria-labelledby="title"></section>
-    <p class="source">메뉴: 2026.10.26 기기 조회 기준 29종 · 메뉴·레시피 연결 확인</p>
+    <p class="source">2026.10.27 기준 · 기기별 HOT 13종 / ICE 16종 · 아메리카노 L(고소) / R(산미)</p>
   </main>
-  <footer>아미라운지 4-R 전용 · 현장 스캔·제조 시험 미실시</footer>
+  <footer>포병여단 L/R 무료 반복 데모 · 주문 영수증 QR과 별개 · 실제 스캔·제조 확인은 현장에서 진행해 주세요.</footer>
 </body>
 </html>
