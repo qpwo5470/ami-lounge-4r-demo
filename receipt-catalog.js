@@ -573,7 +573,7 @@ window.RECEIPT_CATALOG = {
           "name": "아미라운지 17대대-L",
           "roast": "고소",
           "blocked": {
-            "demo": "데모 QR 기기 연결 없음",
+            "demo": "",
             "receipt": ""
           },
           "menus": [

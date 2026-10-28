@@ -442,7 +442,7 @@ test('site picker lists six sites and the legacy ?device=R link opens Pobyeong R
   assert.equal(options.length, 6);
   assert.equal(await page.inputValue('#site'), 'artillery-brigade');
   assert.equal(await page.inputValue('#device'), 'R');
-  assert.match(options.join('|'), /포병여단\|17대대 \(영수증 QR만\)\|공병대대 \(준비 중\)/);
+  assert.match(options.join('|'), /포병여단\|17대대\|공병대대 \(준비 중\)/);
   assert.match(await page.locator('#site-badge').textContent(), /포병여단/);
   await page.locator('.category.hot').click();
   await page.locator('#content .drink').first().click();
@@ -571,4 +571,21 @@ test('mobile width has no horizontal overflow for every site and mode', async ()
     assert.deepEqual(page.errors, []);
     await page.context().close();
   }
+});
+
+test('17-battalion L shows the shared demo QR with the site name', async () => {
+  const page = await newPage('?site=17-battalion&device=L');
+  assert.equal(await page.locator('#site-status').isVisible(), false);
+  await page.locator('.category.ice').click();
+  await page.locator('#content .drink').first().click();
+  assert.match(await page.locator('h1').textContent(), /아메리카노\(고소\)/);
+  assert.match(await page.locator('#description').textContent(), /17대대 L 기기/);
+  const img = page.locator('.qr-panel img');
+  assert.equal(await img.getAttribute('src'), 'qr/drink-14.svg');
+  assert.equal(await img.evaluate(node => node.decode().then(() => node.naturalWidth > 0)), true);
+  await page.selectOption('#device', 'R');
+  assert.equal(await page.locator('.qr-panel img').count(), 0);
+  assert.match(await page.locator('#site-status').textContent(), /데모 QR 기기 연결 없음/);
+  assert.deepEqual(page.errors, []);
+  await page.context().close();
 });
