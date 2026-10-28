@@ -62,7 +62,7 @@ test('readiness: only sites with verified demo bindings allow demo QR', () => {
   assert.equal(byId('artillery-brigade').devices.L.blocked.demo, '');
   assert.equal(byId('artillery-brigade').devices.R.blocked.demo, '');
   assert.equal(byId('17-battalion').devices.L.blocked.demo, '');
-  assert.notEqual(byId('17-battalion').devices.R.blocked.demo, '');
+  assert.equal(byId('17-battalion').devices.R.blocked.demo, '');
 });
 
 test('readiness: partial or missing mappings and unknown stores block receipts', () => {

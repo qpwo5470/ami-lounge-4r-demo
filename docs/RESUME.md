@@ -73,3 +73,4 @@
 - 방식: #291/offline-demo와 같은 `run-as`로 `shared_prefs/local_demo_qr.xml` 작성(schemaVersion 2, enabled, device_id=해당 기기, 새 revision_id, parent 없음). 같은 29개 토큰 재사용, 지문은 기기 Room 메뉴 기준 `sha256(originalId␟categoryId␟name␟recipe…)`(포병여단 R 백업 prefs 29/29로 계산식 검증).
 - 17대대 L(de8aface…): 29/29 연결, 아메리카노는 고소 메뉴. 백업 `~/408d-army-display/install-backup-17-L-20261028-201338/`. 앱 재시작 후 OrderActivity 대기 화면, FATAL 없음. → 사이트 데모 사용 켬.
 - 17대대 R(b250e466…): 29/29 지문 계산 완료·백업 `install-backup-17-R-20261028-201553/`, 그러나 기기가 관리자 하드웨어 테스트(IceRush 모니터링) 화면이라 쓰기 보류. 사이트 R 데모는 준비 중 유지.
+- 17대대 R: 관리자 화면 종료 후 재백업 `install-backup-17-R-20261028-201937/`, 29/29 연결(아메리카노 산미), 앱 재시작 후 OrderActivity·FATAL 없음 → 사이트 R 데모 사용 켬.
