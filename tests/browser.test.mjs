@@ -452,19 +452,27 @@ test('site picker lists six sites and the legacy ?device=R link opens Pobyeong R
   await page.context().close();
 });
 
-test('?site=17-battalion&device=R selects the site; demo QR is blocked with a reason', async () => {
+test('?site=17-battalion&device=R selects the site and shows its demo QR', async () => {
   const page = await newPage('?site=17-battalion&device=R');
   assert.equal(await page.inputValue('#site'), '17-battalion');
   assert.equal(await page.inputValue('#device'), 'R');
   assert.match(await page.locator('#device option[value="R"]').textContent(), /산미/);
-  assert.equal(await page.locator('#site-status').isVisible(), true);
-  assert.match(await page.locator('#site-status').textContent(), /데모 QR 기기 연결 없음/);
-  assert.equal(await page.locator('#content .category').count(), 0);
-  assert.equal(await page.locator('#content img').count(), 0);
-  assert.equal(await page.locator('.blocked-panel').isVisible(), true);
+  assert.equal(await page.locator('#site-status').isVisible(), false);
+  await page.locator('.category.hot').click();
+  await page.locator('#content .drink').first().click();
+  assert.match(await page.locator('h1').textContent(), /아메리카노\(산미\)/);
   const shown = (await page.locator('title, header, #site-status, #demo-mode, footer').allTextContents()).join('|');
   assert.doesNotMatch(shown, /포병여단/); // 매장 목록 외 문구에 포병여단 하드코딩 없음
   assert.deepEqual(page.errors, []);
+  await page.context().close();
+});
+
+test('engineer-battalion demo is blocked with a reason', async () => {
+  const page = await newPage('?site=engineer-battalion&device=L');
+  assert.equal(await page.locator('#site-status').isVisible(), true);
+  assert.match(await page.locator('#site-status').textContent(), /데모 QR 기기 연결 없음/);
+  assert.equal(await page.locator('#content img').count(), 0);
+  assert.equal(await page.locator('#content .blocked-panel').isVisible(), true);
   await page.context().close();
 });
 
@@ -584,8 +592,8 @@ test('17-battalion L shows the shared demo QR with the site name', async () => {
   assert.equal(await img.getAttribute('src'), 'qr/drink-14.svg');
   assert.equal(await img.evaluate(node => node.decode().then(() => node.naturalWidth > 0)), true);
   await page.selectOption('#device', 'R');
-  assert.equal(await page.locator('.qr-panel img').count(), 0);
-  assert.match(await page.locator('#site-status').textContent(), /데모 QR 기기 연결 없음/);
+  assert.match(await page.locator('h1').textContent(), /아메리카노\(산미\)/); // 같은 토큰, R 이름
+  assert.match(await page.locator('#description').textContent(), /17대대 R 기기/);
   assert.deepEqual(page.errors, []);
   await page.context().close();
 });

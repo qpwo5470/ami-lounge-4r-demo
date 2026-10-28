@@ -845,7 +845,7 @@ window.RECEIPT_CATALOG = {
           "name": "아미라운지 17대대-R",
           "roast": "산미",
           "blocked": {
-            "demo": "데모 QR 기기 연결 없음",
+            "demo": "",
             "receipt": ""
           },
           "menus": [
