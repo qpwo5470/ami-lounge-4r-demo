@@ -3,7 +3,7 @@
 (() => {
   'use strict';
   const core = window.RECEIPT_CORE;
-  const catalog = window.RECEIPT_CATALOG;
+  const shell = window.DEMO_SHELL;
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const DEFAULT_POS = { L: '01', R: '02' };
   const STALE_NOTE = '설정이 바뀌어 진행 중이던 이전 요청의 결과는 표시하지 않습니다. 그 요청은 서버에 기록되었을 수 있습니다.';
@@ -26,7 +26,7 @@
   const resultBox = el('receipt-result');
 
   let authKey = '';            // 메모리 전용. 저장·표시·기록하지 않는다.
-  let side = window.DEMO_SHELL ? window.DEMO_SHELL.device : 'L';
+  let side = shell.device;
   let category = 'HOT';
   let selected = null;
   let attempt = null;          // 직전에 만든 불변 요청
@@ -34,10 +34,16 @@
   let billNoDirty = false;     // 사용자가 직접 입력한 번호는 자동 변경하지 않는다
   let generation = 0;          // 화면 맥락 세대. 응답은 자기 세대에서만 표시한다.
 
-  storeOutput.textContent = catalog.storeCd;
-  sourceInput.value = catalog.sourceId;
+  // 선택한 매장의 카탈로그. 준비 중(기기 미등록·매핑 없음·매장코드 미확인)이면 메뉴를 비우고 전송을 막는다.
+  const site = () => shell.site;
+  const receiptReady = () => shell.availability(shell.siteId, side, 'receipt').ready;
+  function applySite() {
+    storeOutput.textContent = site().storeCd || '미확인';
+    sourceInput.value = site().sourceId || '';
+  }
+  applySite();
 
-  const sideMenus = () => (catalog.devices[side] ? catalog.devices[side].menus : [])
+  const sideMenus = () => (receiptReady() ? site().devices[side].menus : [])
     .slice()
     .sort((a, b) => a.productCode.localeCompare(b.productCode));
   const businessDate = () => core.kstParts(new Date()).businessDate;
@@ -69,10 +75,11 @@
   }
 
   function updateSendState() {
-    const ready = Boolean(authKey) && Boolean(selected) && !inFlight;
+    const ready = Boolean(authKey) && Boolean(selected) && !inFlight && receiptReady();
     sendButton.disabled = !ready;
-    retryButton.disabled = inFlight;
+    retryButton.disabled = inFlight || !receiptReady();
     for (const node of [sourceInput, posSelect, billInput, keyInput, applyKey, clearKey]) node.disabled = inFlight;
+    sourceInput.disabled = inFlight || !receiptReady();
     for (const node of drinks.children) node.disabled = inFlight;
     for (const node of categoryTabs.children) node.disabled = inFlight;
   }
@@ -102,6 +109,14 @@
 
   function renderDrinks() {
     drinks.replaceChildren();
+    if (!receiptReady()) {
+      const state = shell.availability(shell.siteId, side, 'receipt');
+      const panel = document.createElement('div');
+      panel.className = 'blocked-panel';
+      panel.textContent = `${site().name} ${side} 기기는 영수증 QR 준비 중입니다 (사유: ${state.reason}). 전송할 수 없습니다.`;
+      drinks.append(panel);
+      return;
+    }
     for (const item of sideMenus().filter(menu => menu.category === category)) {
       const node = document.createElement('button');
       node.type = 'button';
@@ -129,7 +144,7 @@
       ['상품코드', selected.productCode],
       ['menuItemId', String(selected.menuItemId)],
       ['금액', `${selected.price.toLocaleString('ko-KR')}원`],
-      ['기기', `${catalog.devices[side].name} (${side})`],
+      ['기기', `${site().devices[side].name} (${side})`],
     ];
     selectedBox.append(definitionList(rows));
   }
@@ -266,14 +281,14 @@
   }
 
   sendButton.addEventListener('click', () => {
-    if (inFlight || !selected || !authKey) return;
+    if (inFlight || !selected || !authKey || !receiptReady()) return;
     invalidateContext();
     refreshBillNoDefault();
     let request;
     try {
       request = core.buildAttempt({
         menu: selected,
-        storeCd: catalog.storeCd,
+        storeCd: site().storeCd,
         posNo: posSelect.value,
         billNo: billInput.value.trim(),
         sourceId: sourceInput.value,
@@ -290,7 +305,7 @@
   });
 
   retryButton.addEventListener('click', () => {
-    if (!attempt || inFlight) return;
+    if (!attempt || inFlight || !receiptReady()) return;
     send(attempt, true);
   });
 
@@ -331,6 +346,7 @@
     side = event.detail;
     selected = null;
     invalidateContext();
+    applySite();
     posSelect.value = DEFAULT_POS[side] || '01';
     billNoDirty = false;
     refreshBillNoDefault();

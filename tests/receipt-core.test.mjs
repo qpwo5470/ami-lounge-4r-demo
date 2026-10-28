@@ -11,8 +11,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const core = require('../receipt-core.js');
 const catalog = require('../receipt-catalog.json');
 
-const menu = catalog.devices.L.menus.find(item => item.productCode === 'AL001HG');
-const base = { menu, storeCd: catalog.storeCd, posNo: '01', billNo: '9001', sourceId: catalog.sourceId };
+const pobyeong = catalog.sites.find(site => site.id === 'artillery-brigade');
+const menu = pobyeong.devices.L.menus.find(item => item.productCode === 'AL001HG');
+const base = { menu, storeCd: pobyeong.storeCd, posNo: '01', billNo: '9001', sourceId: pobyeong.sourceId };
 // 2026-10-27T15:04:05.678Z = KST 2026-10-28 00:04:05.67 (날짜 넘김 검증)
 const crossMidnight = new Date('2026-10-27T15:04:05.678Z');
 
@@ -140,33 +141,38 @@ test('errors and ambiguity never produce a QR', () => {
   }
 });
 
-test('catalog has the current verified 29 mappings per side with required fields', () => {
-  assert.equal(catalog.storeCd, 'N61605');
-  assert.equal(catalog.sourceId, 'kis-N61605');
-  assert.deepEqual(catalog.posOptions, ['01', '02']);
-  for (const side of ['L', 'R']) {
-    const menus = catalog.devices[side].menus;
-    assert.equal(menus.length, 29, side);
-    assert.equal(menus.filter(item => item.category === 'HOT').length, 13, side);
-    assert.equal(menus.filter(item => item.category === 'ICE').length, 16, side);
-    const codes = new Set();
-    for (const item of menus) {
-      assert.ok(Number.isInteger(item.menuItemId) && item.menuItemId > 0);
-      assert.equal(item.menuItemId, item.id);
-      assert.match(item.productCode, /^AL\d{3}[HI][GS]?$/);
-      assert.ok(typeof item.name === 'string' && item.name.length > 0);
-      assert.ok(Number.isInteger(item.price) && item.price > 0);
-      assert.equal(item.storeCd, 'N61605');
-      assert.ok(!codes.has(item.productCode), `duplicate ${item.productCode}`);
-      codes.add(item.productCode);
+for (const [siteId, storeCd] of [['artillery-brigade', 'N61605'], ['17-battalion', 'N61742']]) {
+  test(`catalog has 29 verified mappings per side for ${siteId}`, () => {
+    const site = catalog.sites.find(s => s.id === siteId);
+    assert.equal(site.storeCd, storeCd);
+    assert.equal(site.sourceId, `kis-${storeCd}`);
+    for (const side of ['L', 'R']) {
+      const menus = site.devices[side].menus;
+      assert.equal(site.devices[side].blocked.receipt, '', side);
+      assert.equal(menus.length, 29, side);
+      assert.equal(menus.filter(item => item.category === 'HOT').length, 13, side);
+      assert.equal(menus.filter(item => item.category === 'ICE').length, 16, side);
+      const codes = new Set();
+      for (const item of menus) {
+        assert.ok(Number.isInteger(item.menuItemId) && item.menuItemId > 0);
+        assert.equal(item.menuItemId, item.id);
+        assert.match(item.productCode, /^AL\d{3}[HI][GS]?$/);
+        assert.ok(typeof item.name === 'string' && item.name.length > 0);
+        assert.ok(Number.isInteger(item.price) && item.price > 0);
+        assert.equal(item.storeCd, storeCd);
+        assert.ok(!codes.has(item.productCode), `duplicate ${item.productCode}`);
+        codes.add(item.productCode);
+      }
     }
-  }
-  const l = catalog.devices.L.menus.find(item => item.productCode === 'AL001HG');
-  const r = catalog.devices.R.menus.find(item => item.productCode === 'AL001HS');
-  assert.equal(l.name, '아메리카노(고소)');
-  assert.equal(r.name, '아메리카노(산미)');
-  assert.equal(core.buildAttempt({ ...base, menu: r, now: crossMidnight }).body.PRODUCT[0].PROD_NM, '아메리카노(산미)');
-});
+    const l = site.devices.L.menus.find(item => item.productCode === 'AL001HG');
+    const r = site.devices.R.menus.find(item => item.productCode === 'AL001HS');
+    assert.equal(l.name, '아메리카노(고소)');
+    assert.equal(r.name, '아메리카노(산미)');
+    const attempt = core.buildAttempt({ ...base, storeCd: site.storeCd, sourceId: site.sourceId, menu: r, now: crossMidnight });
+    assert.equal(attempt.body.PRODUCT[0].PROD_NM, '아메리카노(산미)');
+    assert.equal(attempt.body.STORE_CD, storeCd);
+  });
+}
 
 test('generated catalog script is in sync with the json source', () => {
   assert.equal(readFileSync(TARGET, 'utf8'), renderCatalogScript());

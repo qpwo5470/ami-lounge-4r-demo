@@ -47,8 +47,8 @@ test.after(async () => {
   await new Promise(resolve => server.close(resolve));
 });
 
-async function newPage() {
-  const context = await browser.newContext({ viewport: { width: 420, height: 900 } });
+async function newPage(query = '', viewport = { width: 420, height: 900 }) {
+  const context = await browser.newContext({ viewport });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', error => errors.push(String(error)));
@@ -67,7 +67,7 @@ async function newPage() {
   });
   page.errors = errors;
   page.external = external;
-  await page.goto(`${origin}/index.html`, { waitUntil: 'load' });
+  await page.goto(`${origin}/index.html${query}`, { waitUntil: 'load' });
   return page;
 }
 
@@ -263,6 +263,7 @@ for (const [label, responder, kind] of [
    요청은 중단하지 않고(수락되었을 수 있으므로) 자동 재전송도 하지 않는다. */
 for (const [label, interrupt] of [
   ['side change', async page => page.selectOption('#device', 'L')],
+  ['site change and back', async page => { await page.selectOption('#site', '17-battalion'); await page.selectOption('#site', 'artillery-brigade'); await page.selectOption('#device', 'R'); }],
   ['mode change and back', async page => { await page.click('#mode-demo'); await page.click('#mode-receipt'); }],
 ]) {
   test(`delayed success is not shown after a ${label} while in flight`, async () => {
@@ -432,4 +433,142 @@ test('send is blocked without a key and the key survives menu changes', async ()
   assert.equal(await page.locator('#receipt-send').isDisabled(), true);
   assert.equal(await page.locator('#receipt-result').isVisible(), false);
   await page.context().close();
+});
+
+/* ---- 다매장: 매장 선택, 준비 중 차단, URL 파라미터, 모바일 레이아웃 ---- */
+test('site picker lists six sites and the legacy ?device=R link opens Pobyeong R', async () => {
+  const page = await newPage('?device=R');
+  const options = await page.locator('#site option').allTextContents();
+  assert.equal(options.length, 6);
+  assert.equal(await page.inputValue('#site'), 'artillery-brigade');
+  assert.equal(await page.inputValue('#device'), 'R');
+  assert.match(options.join('|'), /포병여단\|17대대 \(영수증 QR만\)\|공병대대 \(준비 중\)/);
+  assert.match(await page.locator('#site-badge').textContent(), /포병여단/);
+  await page.locator('.category.hot').click();
+  await page.locator('#content .drink').first().click();
+  assert.match(await page.locator('#description').textContent(), /포병여단 R 기기/);
+  assert.equal(await page.locator('#site-status').isVisible(), false);
+  assert.deepEqual(page.errors, []);
+  await page.context().close();
+});
+
+test('?site=17-battalion&device=R selects the site; demo QR is blocked with a reason', async () => {
+  const page = await newPage('?site=17-battalion&device=R');
+  assert.equal(await page.inputValue('#site'), '17-battalion');
+  assert.equal(await page.inputValue('#device'), 'R');
+  assert.match(await page.locator('#device option[value="R"]').textContent(), /산미/);
+  assert.equal(await page.locator('#site-status').isVisible(), true);
+  assert.match(await page.locator('#site-status').textContent(), /데모 QR 기기 연결 없음/);
+  assert.equal(await page.locator('#content .category').count(), 0);
+  assert.equal(await page.locator('#content img').count(), 0);
+  assert.equal(await page.locator('.blocked-panel').isVisible(), true);
+  const shown = (await page.locator('title, header, #site-status, #demo-mode, footer').allTextContents()).join('|');
+  assert.doesNotMatch(shown, /포병여단/); // 매장 목록 외 문구에 포병여단 하드코딩 없음
+  assert.deepEqual(page.errors, []);
+  await page.context().close();
+});
+
+test('unknown site falls back to the default site', async () => {
+  const page = await newPage('?site=nope&device=L');
+  assert.equal(await page.inputValue('#site'), 'artillery-brigade');
+  assert.equal(await page.locator('#content .category').count(), 2);
+  await page.context().close();
+});
+
+test('switching sites resets the demo flow, hides QR and updates the URL', async () => {
+  const page = await newPage();
+  await page.locator('.category.ice').click();
+  await page.locator('#content .drink').first().click();
+  assert.equal(await page.locator('.qr-panel img').count(), 1);
+  await page.selectOption('#site', '17-battalion');
+  assert.equal(await page.locator('.qr-panel img').count(), 0);
+  assert.equal(await page.locator('#back').isVisible(), false);
+  assert.match(page.url(), /site=17-battalion/);
+  assert.match(page.url(), /device=L/);
+  await page.selectOption('#device', 'R');
+  assert.match(page.url(), /device=R/);
+  await page.selectOption('#site', 'artillery-brigade');
+  assert.equal(await page.locator('#content .category').count(), 2);
+  assert.equal(await page.locator('#site-status').isVisible(), false);
+  assert.deepEqual(page.errors, []);
+  await page.context().close();
+});
+
+test('17-battalion receipt mode uses its own store, source and product codes', async () => {
+  const page = await newPage('?site=17-battalion&device=L');
+  const seen = await mockEndpoint(page, json(200, { code: 'ACCEPTED' }));
+  await page.click('#mode-receipt');
+  assert.equal(await page.locator('#site-status').isVisible(), false);
+  assert.equal(await page.locator('#store-cd').textContent(), 'N61742');
+  assert.equal(await page.inputValue('#source-id'), 'kis-N61742');
+  assert.equal(await page.locator('#receipt-drinks button').count(), 13);
+  await page.fill('#auth-key', FAKE_KEY);
+  await page.click('#auth-apply');
+  await page.locator('#receipt-drinks button', { hasText: '아메리카노(고소)' }).click();
+  await page.click('#receipt-send');
+  await page.waitForSelector('#receipt-result:not([hidden])');
+  assert.equal(seen.length, 1);
+  assert.equal(seen[0].headers['x-kiosk-source'], 'kis-N61742');
+  const body = JSON.parse(seen[0].postData);
+  assert.equal(body.STORE_CD, 'N61742');
+  assert.equal(body.PRODUCT[0].PROD_CD, 'AL001HG');
+  assert.match(body.PRODUCT[0].QR_PAYLOAD, /^N61742\|01\|/);
+  assert.equal((await decodeRenderedQr(page)).data, body.PRODUCT[0].QR_PAYLOAD);
+  assert.match(await page.locator('#receipt-selected').textContent(), /17대대-L/);
+  // 매장을 바꾸면 결과 QR이 사라지고 다른 매장 값으로 바뀐다.
+  await page.selectOption('#site', 'artillery-brigade');
+  assert.equal(await page.locator('#receipt-result').isVisible(), false);
+  assert.equal(await page.locator('#store-cd').textContent(), 'N61605');
+  assert.equal(await page.inputValue('#source-id'), 'kis-N61605');
+  assert.deepEqual(page.external, []);
+  assert.deepEqual(page.errors, []);
+  await page.context().close();
+});
+
+for (const [siteId, side, reason] of [
+  ['engineer-battalion', 'L', /상품 매핑 일부만 등록/],
+  ['58-battalion', 'L', /기기 미등록/],
+  ['15-brigade', 'R', /기기 미등록/],
+  ['15-brigade-1-battalion', 'L', /기기 미등록/],
+]) {
+  test(`${siteId} ${side} is pending: no QR and no send in either mode`, async () => {
+    const page = await newPage(`?site=${siteId}&device=${side}`);
+    const seen = await mockEndpoint(page, json(200, { code: 'ACCEPTED' }));
+    assert.equal(await page.locator('#content img').count(), 0);
+    assert.equal(await page.locator('#content .category').count(), 0);
+    assert.equal(await page.locator('#site-status').isVisible(), true);
+    await page.click('#mode-receipt');
+    assert.match(await page.locator('#site-status').textContent(), reason);
+    assert.equal(await page.locator('#receipt-drinks button').count(), 0);
+    assert.match(await page.locator('#receipt-drinks').textContent(), /준비 중/);
+    await page.fill('#auth-key', FAKE_KEY);
+    await page.click('#auth-apply');
+    assert.equal(await page.locator('#receipt-send').isDisabled(), true);
+    await page.locator('#receipt-send').dispatchEvent('click');
+    await page.waitForTimeout(150);
+    assert.equal(seen.length, 0);
+    assert.equal(await page.locator('#receipt-result svg').count(), 0);
+    if (/기기 미등록/.test(String(reason))) {
+      assert.equal(await page.locator('#store-cd').textContent(), '미확인');
+      assert.match(await page.locator(`#device option[value="${side}"]`).textContent(), /기기 미등록/);
+    }
+    assert.deepEqual(page.errors, []);
+    await page.context().close();
+  });
+}
+
+test('mobile width has no horizontal overflow for every site and mode', async () => {
+  for (const viewport of [{ width: 360, height: 800 }, { width: 800, height: 360 }]) {
+    const page = await newPage('', viewport);
+    for (const siteId of ['artillery-brigade', '17-battalion', 'engineer-battalion', '15-brigade-1-battalion']) {
+      await page.selectOption('#site', siteId);
+      for (const mode of ['#mode-demo', '#mode-receipt']) {
+        await page.click(mode);
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        assert.ok(overflow <= 0, `${viewport.width} ${siteId} ${mode} overflow ${overflow}`);
+      }
+    }
+    assert.deepEqual(page.errors, []);
+    await page.context().close();
+  }
 });

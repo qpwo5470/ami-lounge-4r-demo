@@ -4,35 +4,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src https://asia-northeast3-cuppy-408d.cloudfunctions.net; base-uri 'none'; form-action 'none'">
-  <title>아미라운지 포병여단 L/R · 데모 QR</title>
-  <link rel="stylesheet" href="style.css?v=20261027-2">
-  <script src="menu.js?v=20261027-2" defer></script>
-  <script src="receipt-catalog.js?v=20261027-2" defer></script>
+  <title>아미라운지 L/R · 데모 QR</title>
+  <link rel="stylesheet" href="style.css?v=20261028-1">
+  <script src="menu.js?v=20261028-1" defer></script>
+  <script src="receipt-catalog.js?v=20261028-1" defer></script>
   <script src="vendor/qrcode-generator/qrcode.js?v=2.0.4" defer></script>
-  <script src="receipt-core.js?v=20261027-2" defer></script>
-  <script src="app.js?v=20261027-2" defer></script>
-  <script src="receipt.js?v=20261027-2" defer></script>
+  <script src="receipt-core.js?v=20261028-1" defer></script>
+  <script src="app.js?v=20261028-1" defer></script>
+  <script src="receipt.js?v=20261028-1" defer></script>
 </head>
 <body>
-  <header><div class="brand">아미라운지 <span>포병여단 L/R</span></div><p>음료 선택 데모 QR</p></header>
+  <header><div class="brand">아미라운지 <span id="site-badge">포병여단 L/R</span></div><p>음료 선택 데모 QR</p></header>
   <main>
     <div class="mode-tabs" role="group" aria-label="모드 선택">
       <button id="mode-demo" class="mode-tab" aria-pressed="true">무료 반복 데모 QR</button>
       <button id="mode-receipt" class="mode-tab" aria-pressed="false">실제 영수증 QR</button>
     </div>
-    <label class="device-picker" for="device">사용할 기기
-      <select id="device">
-        <option value="L">포병여단 L · 고소</option>
-        <option value="R">포병여단 R · 산미</option>
-      </select>
-    </label>
+    <div class="pickers">
+      <label class="device-picker" for="site">매장
+        <select id="site"></select>
+      </label>
+      <label class="device-picker" for="device">사용할 기기
+        <select id="device">
+          <option value="L">L</option>
+          <option value="R">R</option>
+        </select>
+      </label>
+    </div>
+    <div id="site-status" class="notice notice-pending" role="status" hidden></div>
     <section id="demo-mode" aria-label="무료 반복 데모 QR">
       <div class="notice">현장 기기에서 무료 음료가 제조되는 데모 QR입니다.</div>
       <nav aria-label="이전 화면"><button id="back" hidden>뒤로가기</button><span id="step">카테고리 선택</span></nav>
       <h1 id="title" tabindex="-1">어떤 음료를 고를까요?</h1>
       <p id="description">따뜻하게 또는 시원하게, 카테고리를 선택해 주세요.</p>
       <section id="content" aria-labelledby="title"></section>
-      <p class="source">2026.10.27 기준 · 기기별 HOT 13종 / ICE 16종 · 아메리카노 L(고소) / R(산미)</p>
+      <p class="source">데모 QR 29종(HOT 13 / ICE 16) · 아메리카노 L(고소) / R(산미) · 데모 QR이 연결된 매장 기기에서만 동작합니다.</p>
     </section>
     <section id="receipt-mode" aria-label="실제 영수증 QR" hidden>
       <div class="notice notice-real">
@@ -53,7 +59,7 @@
           <span id="auth-state" class="hint" role="status">키 없음</span>
         </div>
         <label class="field" for="source-id">소스 ID (X-Kiosk-Source)
-          <input id="source-id" type="text" autocomplete="off" spellcheck="false" value="kis-N61605">
+          <input id="source-id" type="text" autocomplete="off" spellcheck="false">
         </label>
         <label class="field" for="pos-no">POS 번호
           <select id="pos-no">
@@ -67,7 +73,7 @@
         </label>
         <div class="field">
           <span class="field-label">매장 코드</span>
-          <output id="store-cd">N61605</output>
+          <output id="store-cd"></output>
         </div>
       </div>
       <div class="receipt-menu">
@@ -82,9 +88,9 @@
       </div>
       <div id="receipt-error" class="error-box" role="alert" hidden></div>
       <div id="receipt-result" class="qr-panel receipt-result" hidden></div>
-      <p class="source">메뉴 값은 receipt-catalog.json(2026.10.27 검증) 기준 선택한 기기의 menuItemId/상품코드/가격을 그대로 사용합니다.</p>
+      <p class="source">메뉴 값은 receipt-catalog.json(서버에서 생성) 기준 선택한 매장·기기의 menuItemId/상품코드/가격을 그대로 사용합니다.</p>
     </section>
   </main>
-  <footer>포병여단 L/R · 무료 반복 데모 QR과 실제 영수증 QR은 별개 · 실제 스캔·제조 확인은 현장에서 진행해 주세요.</footer>
+  <footer>아미라운지 매장별 L/R · 무료 반복 데모 QR과 실제 영수증 QR은 별개 · 실제 스캔·제조 확인은 현장에서 진행해 주세요.</footer>
 </body>
 </html>
