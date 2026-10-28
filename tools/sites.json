@@ -1,0 +1,15 @@
+{
+  "_comment": "매장 표시 이름과 데모 QR 연결 여부는 서버에 없으므로 여기서 관리한다. 나머지(기기·매장코드·소스ID·메뉴·상품코드)는 tools/fetch-catalog.mjs가 Firestore에서 읽는다. demoQr는 기기 앱에 29개 DEMO_ 토큰 연결(local_demo_qr)이 확인된 면만 true로 둔다.",
+  "issuer": "kis",
+  "posOptions": ["01", "02"],
+  "expectedMenuCount": 29,
+  "defaultSite": "artillery-brigade",
+  "sites": [
+    { "id": "artillery-brigade", "name": "포병여단", "demoQr": { "L": true, "R": true } },
+    { "id": "17-battalion", "name": "17대대", "demoQr": { "L": false, "R": false } },
+    { "id": "engineer-battalion", "name": "공병대대", "demoQr": { "L": false, "R": false } },
+    { "id": "15-brigade", "name": "15여단", "demoQr": { "L": false, "R": false } },
+    { "id": "15-brigade-1-battalion", "name": "15여단 1대대", "demoQr": { "L": false, "R": false } },
+    { "id": "58-battalion", "name": "58대대", "demoQr": { "L": false, "R": false } }
+  ]
+}

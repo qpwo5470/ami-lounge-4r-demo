@@ -57,3 +57,13 @@
 - 맥락이 바뀌어도 이전 요청이 끝날 때까지 전송 버튼은 계속 잠겨 이중 전송이 생기지 않는다.
 - 회귀 테스트 추가: 전송 중 기기 변경 / 모드 변경 후 복귀 각각에서 지연 성공이 표시되지 않고 요청은 1건만 나가며, 지연 503도 오류 박스가 뜨지 않음, 맥락 유지 시 재시도가 같은 본문을 쓰는지까지 확인한다.
 - `node --test "tests/*.test.mjs"`: 35개 전부 통과(연속 2회 동일). 데모 QR 이미지 검사는 `decode()` 대기로 바꿔 깜빡임을 없앴다. 운영 호출은 여전히 0건(Chrome DNS를 로컬로 고정). UI 문구/구조 변경은 상태 안내문 외에 없음.
+
+## 다매장 지원 (2026-10-28)
+
+- 화면: `매장`(6곳) + `사용할 기기`(L/R) 선택. 문구의 "포병여단" 하드코딩 제거(배지·제목·QR 안내가 선택 매장 이름을 따름). URL `?site=<id>&device=L|R`, 선택을 바꾸면 URL도 갱신. `?device=R`만 있는 기존 링크와 알 수 없는 site는 기본 매장(포병여단).
+- 카탈로그: `receipt-catalog.json` schemaVersion 2 = `sites[]{id,name,storeCd,sourceId,devices{L|R: null | {id,name,roast,blocked{demo,receipt},menus[]}}}`. 생성: `node tools/fetch-catalog.mjs && node tools/build-catalog.mjs` (사용자 gcloud 토큰, Firestore 읽기 전용; kioskSalesSources는 enabled·allowedStores만 마스크로 요청). 매장 이름·데모 QR 연결 여부는 서버에 없어 `tools/sites.json`에서 관리.
+- 준비 중 규칙: 기기 미등록 → 양쪽 모드 차단. 영수증 QR은 소스(kis-매장코드, enabled) 확인 + 표시 메뉴 중 매핑 29개 이상일 때만. 데모 QR은 `sites.json`의 `demoQr[side]`가 true(기기 앱에 DEMO_ 토큰 연결 확인)일 때만. 차단 시 QR·전송 모두 막고 사유 표시.
+- 2026-10-28 생성 결과: 포병여단 L/R 데모·영수증 가능(N61605). 17대대 L/R 영수증 가능(N61742, 29매핑), 데모 QR 기기 연결 없음. 공병대대 N61766(기기 매핑의 STORE_CD 근거, kioskSales 6건) 매핑 2/29라 준비 중. 15여단·15여단 1대대·58대대 기기 미등록(N61649·N61745·N61747 중 어느 매장인지 미확인).
+- 서버 가격 반영: 카라멜초코라떼 HOT(AL013H) 2300→2500 (포병여단 L/R).
+- 17대대 데모 QR: 기기 prefs에 `local_demo_qr.xml` 없음(읽기 전용 확인). 연결은 지금까지 관리 화면/정식 도구가 아닌 run-as prefs 직접 쓰기(offline-demo setup.py, #291 복구)로만 만들어졌으므로 이번엔 적용하지 않음. 메뉴 id·이름·레시피는 포병여단과 같아 같은 29 토큰 재사용이 지문상 가능.
+- 테스트: `node --test "tests/*.test.mjs"` 52개 통과(매장 전환, 준비 중 차단 4종, URL 파라미터, 카탈로그 스키마, 17대대 영수증 본문 N61742, 모바일 360/800 오버플로 없음). 운영 호출 0(모킹 + DNS 차단).
