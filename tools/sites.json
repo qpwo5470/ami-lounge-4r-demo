@@ -6,7 +6,7 @@
   "defaultSite": "artillery-brigade",
   "sites": [
     { "id": "artillery-brigade", "name": "포병여단", "demoQr": { "L": true, "R": true } },
-    { "id": "17-battalion", "name": "17대대", "demoQr": { "L": false, "R": false } },
+    { "id": "17-battalion", "name": "17대대", "demoQr": { "L": true, "R": false } },
     { "id": "engineer-battalion", "name": "공병대대", "demoQr": { "L": false, "R": false } },
     { "id": "15-brigade", "name": "15여단", "demoQr": { "L": false, "R": false } },
     { "id": "15-brigade-1-battalion", "name": "15여단 1대대", "demoQr": { "L": false, "R": false } },

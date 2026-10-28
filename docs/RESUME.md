@@ -67,3 +67,9 @@
 - 서버 가격 반영: 카라멜초코라떼 HOT(AL013H) 2300→2500 (포병여단 L/R).
 - 17대대 데모 QR: 기기 prefs에 `local_demo_qr.xml` 없음(읽기 전용 확인). 연결은 지금까지 관리 화면/정식 도구가 아닌 run-as prefs 직접 쓰기(offline-demo setup.py, #291 복구)로만 만들어졌으므로 이번엔 적용하지 않음. 메뉴 id·이름·레시피는 포병여단과 같아 같은 29 토큰 재사용이 지문상 가능.
 - 테스트: `node --test "tests/*.test.mjs"` 52개 통과(매장 전환, 준비 중 차단 4종, URL 파라미터, 카탈로그 스키마, 17대대 영수증 본문 N61742, 모바일 360/800 오버플로 없음). 운영 호출 0(모킹 + DNS 차단).
+
+### 17대대 데모 QR 연결 (2026-10-28, 사용자 승인)
+
+- 방식: #291/offline-demo와 같은 `run-as`로 `shared_prefs/local_demo_qr.xml` 작성(schemaVersion 2, enabled, device_id=해당 기기, 새 revision_id, parent 없음). 같은 29개 토큰 재사용, 지문은 기기 Room 메뉴 기준 `sha256(originalId␟categoryId␟name␟recipe…)`(포병여단 R 백업 prefs 29/29로 계산식 검증).
+- 17대대 L(de8aface…): 29/29 연결, 아메리카노는 고소 메뉴. 백업 `~/408d-army-display/install-backup-17-L-20261028-201338/`. 앱 재시작 후 OrderActivity 대기 화면, FATAL 없음. → 사이트 데모 사용 켬.
+- 17대대 R(b250e466…): 29/29 지문 계산 완료·백업 `install-backup-17-R-20261028-201553/`, 그러나 기기가 관리자 하드웨어 테스트(IceRush 모니터링) 화면이라 쓰기 보류. 사이트 R 데모는 준비 중 유지.
