@@ -1,7 +1,7 @@
 // 자동 생성 파일. 수정하지 말고 `node tools/build-catalog.mjs`로 다시 만든다. 원본: receipt-catalog.json
 window.RECEIPT_CATALOG = {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-28",
+  "generatedAt": "2026-10-29",
   "issuer": "kis",
   "posOptions": [
     "01",
@@ -158,6 +158,15 @@ window.RECEIPT_CATALOG = {
               "category": "ICE",
               "productCode": "AL002I",
               "menuItemId": 1539,
+              "storeCd": "N61605"
+            },
+            {
+              "id": 8664,
+              "name": "말차카페라떼",
+              "price": 2500,
+              "category": "ICE",
+              "productCode": "AL003I",
+              "menuItemId": 8664,
               "storeCd": "N61605"
             },
             {
@@ -1125,7 +1134,7 @@ window.RECEIPT_CATALOG = {
           "name": "아미라운지 공병대대-L",
           "roast": "",
           "blocked": {
-            "demo": "데모 QR 기기 연결 없음",
+            "demo": "",
             "receipt": "상품 매핑 일부만 등록 (2/29)"
           },
           "menus": [
@@ -1154,7 +1163,7 @@ window.RECEIPT_CATALOG = {
           "name": "아미라운지 공병대대-R",
           "roast": "",
           "blocked": {
-            "demo": "데모 QR 기기 연결 없음",
+            "demo": "",
             "receipt": "상품 매핑 일부만 등록 (2/29)"
           },
           "menus": [
