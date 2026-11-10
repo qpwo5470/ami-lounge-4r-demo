@@ -6,7 +6,7 @@ Local base86e54f3 was behind remote6ff0028. Integrated latest receipt mode/six-s
 
 [SHA256 manifest and HTTP evidence](common-branding-20261110.json) proves original29SVG/menu.js byte equality and preserved receipt assets. Stable Pages URL, stylesheet/script links and existing hosting main/root configuration remain. No QR generation, device access, sale/API request or manufacture. Gate tests execute actual shell with inert DOM and prohibit QR image creation. `node --test tests/catalog.test.mjs tests/demo-gates.test.mjs`:11pass; syntax and diff checks pass. An existing test failed before changes because artilleryL has30rows while assertion required29; changed assertion to generator's existing >=29 readiness policy, retaining all data. QR-generating receipt/browser suites were not run for this scoped task; root performs later visual review.
 
-Next: push latestmain, confirm remoteSHA/Pages build and HTTP source/asset hashes; record live results. No manual Hosting configuration. Prior operational notes below are historical, not current installation claims. Full device installation/manufacture validation remains with coordinator.
+Code commit6ed6ba392ea3163f2bfec2020377aedf3ead490d pushed to main with matching remote SHA. Existing Pages automatic build is built. Live stable URL HTTP200 has new common/recipe text;38public asset GETs including29SVG all match exact local SHA256, catalog12display permissions true. No receiver/API requests. Source/HTTP portion complete; coordinator visual review remains separate. HTTP evidence is committed in the linked manifest. No manual Hosting configuration. Prior operational notes below are historical, not current installation claims. Full device installation/manufacture validation remains with coordinator.
 
 ---
 

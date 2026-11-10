@@ -80,5 +80,246 @@
     "generatedQrCount": 0,
     "existingReceiptFieldsDeepEqual": true,
     "note": "Existing baseline catalog test expected29 but existing artilleryL has30; adjusted assertion to generator existing >=29 readiness rule, no catalog data changed."
+  },
+  "liveHttp": {
+    "checkedAtUtc": "2026-11-10T03:53:40.223654+00:00",
+    "pagesBuildCommit": "6ed6ba392ea3163f2bfec2020377aedf3ead490d",
+    "pagesBuildStatus": "built",
+    "stableUrl": "https://qpwo5470.github.io/ami-lounge-4r-demo/",
+    "stableUrlStatus": 200,
+    "stableHtmlMatchesLocal": true,
+    "cacheBustedAssetChecks": [
+      {
+        "file": "index.html",
+        "status": 200,
+        "sha256": "c72ac18c87cb16fb24ebfcef36d8bbb14a0cbef9f4018c32690b9be8b3ccfcee",
+        "matchesLocal": true
+      },
+      {
+        "file": "app.js",
+        "status": 200,
+        "sha256": "8ac3d869f1e89613e5377d9457ab710f6958891324cdc1911fdcdd7ab5cce8c5",
+        "matchesLocal": true
+      },
+      {
+        "file": "receipt-catalog.js",
+        "status": 200,
+        "sha256": "7f2c62a074f69d072eb3b77076309a8ad5c6ce43a3dffb31315ce71199f2d321",
+        "matchesLocal": true
+      },
+      {
+        "file": "receipt-catalog.json",
+        "status": 200,
+        "sha256": "99f3111b8f6fdcc980381581554779fa9023ebf2e4739d2da0c365da5455aba3",
+        "matchesLocal": true
+      },
+      {
+        "file": "menu.js",
+        "status": 200,
+        "sha256": "92f49b607abe31e42bc487cd6a008c653efc425169feda5e6f7e31a14aaefd8b",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-01.svg",
+        "status": 200,
+        "sha256": "49aa2402c75920dea0de543c5b53df8b002ff9096783bd11127c9a3daa1ad7e5",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-02.svg",
+        "status": 200,
+        "sha256": "111661adcb0e324eaf48ddd4e70e93113060ef3ef46bda810371d23e76335a6c",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-03.svg",
+        "status": 200,
+        "sha256": "2ab41f20b21dc21e6aa41777c67f612a4674c8b0c9fae78f0e3dd0075309cad4",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-04.svg",
+        "status": 200,
+        "sha256": "9de3281a72b794dea014d67a19478d0b457481bbfe5e0985d268c256be108ba5",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-05.svg",
+        "status": 200,
+        "sha256": "110326ab79734187e2e96a4ec05e7ba455c04690cc162d59673440b40681aae6",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-06.svg",
+        "status": 200,
+        "sha256": "33b593ccdf19ac0eb49868a433e091c93e6f200c517d467a6d3a396510955b63",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-07.svg",
+        "status": 200,
+        "sha256": "9d0d6a98f5f093e9f7d8ecfe8ec811a9d941d3c21c8c416cf368de83467cbda1",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-08.svg",
+        "status": 200,
+        "sha256": "fa0e607c5b7aaa5d266150cd637e7f3242225b939533771c6d6888df4324f4a6",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-09.svg",
+        "status": 200,
+        "sha256": "9de6e2f6c2e0f1bbffc424b628441e36f605e47c6c0a59d09913cf8a04049d6a",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-10.svg",
+        "status": 200,
+        "sha256": "e1f8839a70450888b6d2c0e0c5a9cbdfc7624c852110eb9d70a6264311659128",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-11.svg",
+        "status": 200,
+        "sha256": "28ff2d62884ab7e6314fa8b981c9c0bcea1c674164b06019672484a7c2bf93b9",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-12.svg",
+        "status": 200,
+        "sha256": "bbcd27ecbc9fdf6045b9ead12218c2f3494399cb09dcd2e860095dfcf3326af4",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-13.svg",
+        "status": 200,
+        "sha256": "5da69f7577cb8ff32e2fa793adbf21cbfb459d31b6de0b4f3db336b9be41c4c7",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-14.svg",
+        "status": 200,
+        "sha256": "a6e384f89f3da1c6db73b5a68075f2eb50a0367a1232df90b2f5a1581d04e6c1",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-15.svg",
+        "status": 200,
+        "sha256": "9bf8f0e628d7956251916af131b13ba18753f352705108a4f9bbfb3b7e737f70",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-16.svg",
+        "status": 200,
+        "sha256": "9188b8251568165c94cbe75443dbcfeb72b2372e1b6fd725f9dd63dbef728edf",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-17.svg",
+        "status": 200,
+        "sha256": "cffecb2353642dbc34a58cb428a7b56cce9af7a3960090f90041ba1e31b0ffe6",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-18.svg",
+        "status": 200,
+        "sha256": "cbc02529e65e62f951f047a75a6375f310bde236cc2eb258578af70c4a0b5857",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-19.svg",
+        "status": 200,
+        "sha256": "fcac63fcd8915a9e21823687a4c987b43067ef16896e253ecdc8bf09a2ae10b0",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-20.svg",
+        "status": 200,
+        "sha256": "76a7275efadbd0a55344819adde24451f2dbcb7799f10b23a50e0882120a7bc2",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-21.svg",
+        "status": 200,
+        "sha256": "b863fc84956a46225a8b0ffc6662a570edd3e2fa7d0e4cd04d41ff25c4981944",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-22.svg",
+        "status": 200,
+        "sha256": "5c3afba8b2b36367ead4d1fca5535c6cff26541144784079e424ffdc5ea28ec1",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-23.svg",
+        "status": 200,
+        "sha256": "ffa64a406071b515470edfd51efd1f1f473be6872351d72d14971f537b2bcafb",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-24.svg",
+        "status": 200,
+        "sha256": "fccb2127518e166791be7946be1d1ee13648101762cff72e79441401d2fe664b",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-25.svg",
+        "status": 200,
+        "sha256": "5f8dfaf62b687a2a7b014554879a64d48eba8e3d8ecee9f1c55df9424803eaf5",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-26.svg",
+        "status": 200,
+        "sha256": "827d7d328af03053f7e07afa3ebafc30b6d09ff3b3156c560dcf236441db7773",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-27.svg",
+        "status": 200,
+        "sha256": "70bb603290a3ba148f3c66acb7b579bb4bc2bacdf83ad54998981fd4dd145f84",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-28.svg",
+        "status": 200,
+        "sha256": "1081d7091b824b996725c5394840b27c80ff758f02b0089a2f37e0bfcd5edaba",
+        "matchesLocal": true
+      },
+      {
+        "file": "qr/drink-29.svg",
+        "status": 200,
+        "sha256": "e1a7044530f0972397d77b02987c8590d174f9e9b3b617f8327645391fdfd75d",
+        "matchesLocal": true
+      },
+      {
+        "file": "receipt-core.js",
+        "status": 200,
+        "sha256": "a690399dc96e08c7c6d269f6d49ad3b4450f0d18c382906185d560add3b5d11e",
+        "matchesLocal": true
+      },
+      {
+        "file": "receipt.js",
+        "status": 200,
+        "sha256": "8446079684247def7804a24cae7951695abff701a727ec019042ca141a79b7e9",
+        "matchesLocal": true
+      },
+      {
+        "file": "style.css",
+        "status": 200,
+        "sha256": "4d4762a0cc2e943a1d332800634121eb6bd77373c22f73757aeca476895a7638",
+        "matchesLocal": true
+      },
+      {
+        "file": "vendor/qrcode-generator/qrcode.js",
+        "status": 200,
+        "sha256": "79ec86f82856005b1c887905cfccfcfbec3821ca61c7fd5a952faa5f778f791c",
+        "matchesLocal": true
+      }
+    ],
+    "allMatches": true,
+    "demoDisplaySides": 12,
+    "note": "Static HTTP GET only. No receipt/API/device/QR generation or manufacture."
   }
 }
