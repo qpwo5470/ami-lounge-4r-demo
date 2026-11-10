@@ -14,7 +14,7 @@
   <script src="receipt.js?v=20261028-1" defer></script>
 </head>
 <body>
-  <header><div class="brand">아미라운지 <span id="site-badge">포병여단 L/R</span></div><p>음료 선택 데모 QR</p></header>
+  <header><div class="brand">아미라운지 <span id="site-badge">공용 L/R</span></div><p>음료 선택 데모 QR</p></header>
   <main>
     <div class="mode-tabs" role="group" aria-label="모드 선택">
       <button id="mode-demo" class="mode-tab" aria-pressed="true">무료 반복 데모 QR</button>
@@ -33,12 +33,12 @@
     </div>
     <div id="site-status" class="notice notice-pending" role="status" hidden></div>
     <section id="demo-mode" aria-label="무료 반복 데모 QR">
-      <div class="notice">현장 기기에서 무료 음료가 제조되는 데모 QR입니다.</div>
+      <div class="notice">데모 기능이 활성화된 아미라운지 앱에서 사용하는 무료 음료 QR입니다.</div>
       <nav aria-label="이전 화면"><button id="back" hidden>뒤로가기</button><span id="step">카테고리 선택</span></nav>
       <h1 id="title" tabindex="-1">어떤 음료를 고를까요?</h1>
       <p id="description">따뜻하게 또는 시원하게, 카테고리를 선택해 주세요.</p>
       <section id="content" aria-labelledby="title"></section>
-      <p class="source">데모 QR 29종(HOT 13 / ICE 16) · 아메리카노 L(고소) / R(산미) · 데모 QR이 연결된 매장 기기에서만 동작합니다.</p>
+      <p class="source">데모 QR 29종(HOT 13 / ICE 16) · 아메리카노만 L(고소) / R(산미) · 레시피 배합·투출량을 바꿔도 같은 QR을 사용합니다.</p>
     </section>
     <section id="receipt-mode" aria-label="실제 영수증 QR" hidden>
       <div class="notice notice-real">
@@ -91,6 +91,6 @@
       <p class="source">메뉴 값은 receipt-catalog.json(서버에서 생성) 기준 선택한 매장·기기의 menuItemId/상품코드/가격을 그대로 사용합니다.</p>
     </section>
   </main>
-  <footer>아미라운지 매장별 L/R · 무료 반복 데모 QR과 실제 영수증 QR은 별개 · 실제 스캔·제조 확인은 현장에서 진행해 주세요.</footer>
+  <footer>아미라운지 공용 L/R · 무료 반복 데모 QR과 실제 영수증 QR은 별개 · 실제 스캔·제조 확인은 현장에서 진행해 주세요.</footer>
 </body>
 </html>

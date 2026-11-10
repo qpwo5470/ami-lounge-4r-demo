@@ -49,7 +49,7 @@
     sitePicker.value = siteId;
     for (const option of devicePicker.options) {
       const d = site().devices[option.value];
-      option.textContent = d ? `${option.value}${d.roast ? ` · ${d.roast}` : ''}` : `${option.value} · 기기 미등록`;
+      option.textContent = d ? `${option.value}${d.roast ? ` · 아메리카노 ${d.roast}` : ''}` : `${option.value} · 기기 미등록`;
     }
     devicePicker.value = device;
     siteBadge.textContent = `${site().name} L/R`;
@@ -120,7 +120,7 @@
     } else {
       step.textContent = 'QR 보기';
       title.textContent = `${selected.category} ${displayName(selected)}`;
-      description.textContent = `${site().name} ${device} 기기의 스캐너에 QR을 보여주세요.`;
+      description.textContent = `데모 기능이 활성화된 ${site().name} 아미라운지 ${device} 기기의 스캐너에 QR을 보여주세요.`;
       content.className = '';
       const panel = document.createElement('div'); panel.className = 'qr-panel';
       const img = document.createElement('img'); img.src = `qr/${selected.id}.svg`; img.alt = `${selected.category} ${displayName(selected)} 현장 데모 QR`;

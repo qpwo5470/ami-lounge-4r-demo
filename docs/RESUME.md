@@ -1,3 +1,13 @@
+# 아미라운지 공용 L/R 데모 페이지 —2026-11-10
+
+Issue [#6](https://github.com/qpwo5470/ami-lounge-4r-demo/issues/6), related [408d#291](https://github.com/qpwo5470/408d/issues/291). User authorized display-text-only branding update and existing main/root Pages auto-publication. Remove the artillery-only identity; clarify enabled ArmyLounge apps and Americano-only L고소/R산미. Recipe formula/dispense-amount edits keep the same QR. Do not claim every device has installed support.
+
+Only index.html/app.js display strings changed. Stable Pages URL, menu.js menu IDs/names/prices/images, all29SVG/payload bytes, style and script links remain unchanged. [SHA256 manifest and HTTP evidence](common-branding-20261110.json). No QR generation, device access or manufacture. No Hosting configuration change. Remote main was ahead at6ff0028; existing receipt mode, six-site picker, catalogs and per-side demoQr gates were preserved by integrating on that source. Pending15/15-1/58 gate values were not changed by this display-only task. Next: syntax/hash checks, source commit/push, remote SHA and live HTTP verification. Root owns visual field/page review and separate app/device rollout.
+
+Earlier records below describe the historical artillery deployment, not the scope/current installation status of the common page.
+
+---
+
 # 포병여단 L/R 데모 QR 복구
 
 요청/검증 기준: [408d#291](https://github.com/qpwo5470/408d/issues/291).
