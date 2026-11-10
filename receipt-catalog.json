@@ -568,6 +568,10 @@
             }
           ]
         }
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1120,6 +1124,10 @@
             }
           ]
         }
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1186,6 +1194,10 @@
             }
           ]
         }
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1196,6 +1208,10 @@
       "devices": {
         "L": null,
         "R": null
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1206,6 +1222,10 @@
       "devices": {
         "L": null,
         "R": null
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1216,6 +1236,10 @@
       "devices": {
         "L": null,
         "R": null
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     }
   ]

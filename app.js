@@ -18,6 +18,8 @@
   function availability(siteId, side, mode) {
     const site = findSite(siteId);
     if (!site) return { ready: false, reason: '매장 정보 없음' };
+    // Page permission for existing DEMO assets is independent of receipt registration/app installation.
+    if (mode === 'demo' && site.demoQr) return { ready: site.demoQr[side] === true, reason: site.demoQr[side] === true ? '' : '데모 QR 표시 미허용' };
     const device = site.devices[side];
     if (!device) return { ready: false, reason: '기기 미등록' };
     let reason = (device.blocked && device.blocked[mode]) || '';
@@ -49,11 +51,11 @@
     sitePicker.value = siteId;
     for (const option of devicePicker.options) {
       const d = site().devices[option.value];
-      option.textContent = d ? `${option.value}${d.roast ? ` · 아메리카노 ${d.roast}` : ''}` : `${option.value} · 기기 미등록`;
+      option.textContent = d ? `${option.value}${d.roast ? ` · 아메리카노 ${d.roast}` : ''}` : `${option.value}${site().demoQr?.[option.value] ? ' · 데모 QR' : ' · 기기 미등록'}`;
     }
     devicePicker.value = device;
-    siteBadge.textContent = `${site().name} L/R`;
-    document.title = `아미라운지 ${site().name} ${device} · 데모 QR`;
+    siteBadge.textContent = `공용 L/R · ${site().name}`;
+    document.title = `아미라운지 공용 L/R · ${site().name} ${device} 데모 QR`;
   }
 
   function syncUrl() {

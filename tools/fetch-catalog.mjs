@@ -108,7 +108,7 @@ for (const site of config.sites) {
   if (storeCds.length > 1) throw new Error(`${site.id}: 기기별 매장코드가 다름 ${storeCds}`);
   const storeCd = storeCds[0] || '';
   const src = storeCd ? await source(storeCd, config.issuer) : null;
-  const entry = { id: site.id, name: site.name, storeCd, sourceId: src ? src.id : '', devices: {} };
+  const entry = { id: site.id, name: site.name, storeCd, sourceId: src ? src.id : '', devices: {}, demoQr: site.demoQr };
   for (const side of ['L', 'R']) {
     const d = devices[side];
     if (!d) { entry.devices[side] = null; continue; }

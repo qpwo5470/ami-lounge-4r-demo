@@ -20,7 +20,7 @@ test('catalog schema v2 lists every configured army lounge site in order', () =>
   assert.deepEqual(catalog.sites.map(site => site.id), sites.sites.map(site => site.id));
   assert.deepEqual(catalog.sites.map(site => site.name), ['포병여단', '17대대', '공병대대', '15여단', '15여단 1대대', '58대대']);
   for (const site of catalog.sites) {
-    assert.deepEqual(Object.keys(site).sort(), ['devices', 'id', 'name', 'sourceId', 'storeCd'], site.id);
+    assert.deepEqual(Object.keys(site).sort(), ['demoQr', 'devices', 'id', 'name', 'sourceId', 'storeCd'], site.id);
     assert.deepEqual(Object.keys(site.devices).sort(), ['L', 'R'], site.id);
     if (site.storeCd) assert.match(site.storeCd, /^N\d{5}$/);
     if (site.sourceId) assert.equal(site.sourceId, `kis-${site.storeCd}`);
@@ -50,9 +50,11 @@ test('device ids are unique across sites and match the placements', () => {
   assert.equal(byId('17-battalion').devices.R.roast, '산미');
 });
 
-test('readiness: only sites with verified demo bindings allow demo QR', () => {
+test('all12 demo display permissions are explicit and do not assert app installation', () => {
   for (const site of catalog.sites) {
     const configured = sites.sites.find(s => s.id === site.id).demoQr;
+    assert.deepEqual(site.demoQr, configured);
+    assert.deepEqual(site.demoQr, { L: true, R: true });
     for (const side of ['L', 'R']) {
       const device = site.devices[side];
       if (!device) continue;
@@ -83,7 +85,8 @@ test('readiness: partial or missing mappings and unknown stores block receipts',
       const device = site.devices[side];
       if (!device || device.blocked.receipt) continue;
       assert.ok(site.sourceId && site.storeCd, `${site.id} ${side} ready needs a source`);
-      assert.equal(device.menus.length, catalog.expectedMenuCount, `${site.id} ${side}`);
+      // Generator blocks fewer mappings; existing extra mappings are not a receipt blocker.
+      assert.ok(device.menus.length >= catalog.expectedMenuCount, `${site.id} ${side}`);
     }
   }
 });

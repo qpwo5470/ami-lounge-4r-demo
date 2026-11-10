@@ -569,6 +569,10 @@ window.RECEIPT_CATALOG = {
             }
           ]
         }
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1121,6 +1125,10 @@ window.RECEIPT_CATALOG = {
             }
           ]
         }
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1187,6 +1195,10 @@ window.RECEIPT_CATALOG = {
             }
           ]
         }
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1197,6 +1209,10 @@ window.RECEIPT_CATALOG = {
       "devices": {
         "L": null,
         "R": null
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1207,6 +1223,10 @@ window.RECEIPT_CATALOG = {
       "devices": {
         "L": null,
         "R": null
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     },
     {
@@ -1217,6 +1237,10 @@ window.RECEIPT_CATALOG = {
       "devices": {
         "L": null,
         "R": null
+      },
+      "demoQr": {
+        "L": true,
+        "R": true
       }
     }
   ]
